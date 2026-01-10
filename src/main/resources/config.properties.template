@@ -1,0 +1,27 @@
+# Database Configuration
+db.url=jdbc:mysql://localhost:3306/expense_tracker_db
+db.username=YOUR_DB_USERNAME
+db.password=YOUR_DB_PASSWORD
+
+# Email Configuration
+email.smtp.host=smtp.gmail.com
+email.smtp.port=587
+email.smtp.username=YOUR_EMAIL@gmail.com
+email.smtp.password=YOUR_APP_PASSWORD
+email.from.name=ExpenseTracker
+email.from.address=noreply@expensetracker.com
+
+# Application Configuration
+app.base.url=http://localhost:8080/expense-tracker
+app.name=ExpenseTracker
+
+# Security Configuration
+security.token.expiry.hours=24
+security.remember.me.days=15
+security.password.reset.hours=1
+security.session.timeout.minutes=30
+security.forgot.password.cooldown.seconds=5
+
+# Feature Flags
+feature.email.verification.enabled=true
+feature.budget.alerts.enabled=false

@@ -1,0 +1,31 @@
+2026-01-07 12:38:01.530 [main] INFO  org.flywaydb.core.FlywayExecutor - Database: jdbc:mysql://localhost:3306/expense_tracker_db (MySQL 8.0)
+2026-01-07 12:45:07.551 [main] INFO  org.flywaydb.core.FlywayExecutor - Database: jdbc:mysql://localhost:3306/expense_tracker_db (MySQL 8.0)
+2026-01-07 12:45:07.792 [main] INFO  o.f.core.internal.command.DbValidate - Successfully validated 9 migrations (execution time 00:00.130s)
+2026-01-07 12:45:07.841 [main] INFO  o.f.core.internal.command.DbMigrate - Current version of schema `expense_tracker_db`: 9
+2026-01-07 12:45:07.856 [main] INFO  o.f.core.internal.command.DbMigrate - Schema `expense_tracker_db` is up to date. No migration necessary.
+2026-01-07 12:45:26.095 [http-nio-8080-exec-2] DEBUG c.e.controller.LoginServlet - GET /login - Checking if user already logged in
+2026-01-07 12:45:26.115 [http-nio-8080-exec-2] DEBUG c.e.controller.LoginServlet - Displaying login form
+2026-01-07 12:45:43.317 [http-nio-8080-exec-7] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-01-07 12:45:43.621 [http-nio-8080-exec-7] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@53500269
+2026-01-07 12:45:43.640 [http-nio-8080-exec-7] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-01-07 12:46:10.548 [http-nio-8080-exec-9] DEBUG c.e.controller.ResetPasswordServlet - Processing password reset link (GET)
+2026-01-07 12:46:10.567 [http-nio-8080-exec-9] DEBUG c.e.controller.ResetPasswordServlet - Token verified, displaying reset password form
+2026-01-07 12:46:47.503 [http-nio-8080-exec-2] DEBUG c.e.controller.ResetPasswordServlet - Processing password reset submission (POST)
+2026-01-07 12:46:47.888 [http-nio-8080-exec-2] INFO  c.e.controller.ResetPasswordServlet - Password successfully reset for user bhargav_007_
+2026-01-07 12:46:47.896 [http-nio-8080-exec-3] DEBUG c.e.controller.LoginServlet - GET /login - Checking if user already logged in
+2026-01-07 12:46:47.898 [http-nio-8080-exec-3] DEBUG c.e.controller.LoginServlet - Displaying login form
+2026-01-07 12:46:58.701 [http-nio-8080-exec-5] DEBUG c.e.controller.LoginServlet - POST /login - Login attempt for username: bhargav_007_
+2026-01-07 12:46:58.859 [http-nio-8080-exec-5] INFO  c.e.controller.LoginServlet - Successful login for user: bhargav_007_ (ID: 2)
+2026-01-07 12:46:58.862 [http-nio-8080-exec-5] DEBUG c.e.controller.LoginServlet - Invalidating old session for security (session fixation prevention)
+2026-01-07 12:46:58.865 [http-nio-8080-exec-5] DEBUG c.e.controller.LoginServlet - Remember Me not checked, clearing any existing cookie
+2026-01-07 12:46:58.866 [http-nio-8080-exec-5] INFO  c.e.controller.LoginServlet - Login completed successfully for user bhargav_007_, redirecting to dashboard
+2026-01-07 12:46:58.920 [http-nio-8080-exec-6] DEBUG c.e.controller.DashboardServlet - Loading dashboard for user 2
+2026-01-07 12:46:59.316 [http-nio-8080-exec-6] DEBUG c.e.controller.DashboardServlet - Dashboard loaded successfully for user 2
+2026-01-07 12:47:19.160 [http-nio-8080-exec-8] DEBUG c.e.controller.ListExpensesServlet - User 2 requested expense list
+2026-01-07 12:47:19.164 [http-nio-8080-exec-8] DEBUG c.e.controller.ListExpensesServlet - Fetching expenses for user 2: page=1, pageSize=20, filters=[from=null, to=null, cat=null]
+2026-01-07 12:47:24.022 [http-nio-8080-exec-10] DEBUG c.e.controller.ListExpensesServlet - User 2 requested expense list
+2026-01-07 12:47:24.022 [http-nio-8080-exec-10] DEBUG c.e.controller.ListExpensesServlet - Fetching expenses for user 2: page=1, pageSize=20, filters=[from=null, to=null, cat=null]
+2026-01-07 12:47:26.544 [http-nio-8080-exec-2] DEBUG c.e.controller.ListExpensesServlet - User 2 requested expense list
+2026-01-07 12:47:26.545 [http-nio-8080-exec-2] DEBUG c.e.controller.ListExpensesServlet - Fetching expenses for user 2: page=1, pageSize=20, filters=[from=null, to=null, cat=null]
+2026-01-07 12:47:29.913 [http-nio-8080-exec-4] DEBUG c.e.controller.ListExpensesServlet - User 2 requested expense list
+2026-01-07 12:47:29.914 [http-nio-8080-exec-4] DEBUG c.e.controller.ListExpensesServlet - Fetching expenses for user 2: page=1, pageSize=20, filters=[from=null, to=null, cat=null]

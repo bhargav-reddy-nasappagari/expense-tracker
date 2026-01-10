@@ -1,0 +1,56 @@
+2026-01-04 14:24:26.417 [main] INFO  org.flywaydb.core.FlywayExecutor - Database: jdbc:mysql://localhost:3306/expense_tracker_db (MySQL 8.0)
+2026-01-04 14:24:26.814 [main] INFO  o.f.core.internal.command.DbValidate - Successfully validated 9 migrations (execution time 00:00.179s)
+2026-01-04 14:24:26.858 [main] INFO  o.f.core.internal.command.DbMigrate - Current version of schema `expense_tracker_db`: 9
+2026-01-04 14:24:26.868 [main] INFO  o.f.core.internal.command.DbMigrate - Schema `expense_tracker_db` is up to date. No migration necessary.
+2026-01-04 14:37:33.331 [http-nio-8080-exec-1] DEBUG c.e.controller.LoginServlet - GET /login - Checking if user already logged in
+2026-01-04 14:37:33.342 [http-nio-8080-exec-1] DEBUG c.e.controller.LoginServlet - Displaying login form
+2026-01-04 14:37:46.552 [http-nio-8080-exec-7] DEBUG c.e.controller.LoginServlet - POST /login - Login attempt for username: bhargav_007_
+2026-01-04 14:37:46.767 [http-nio-8080-exec-7] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-01-04 14:37:47.102 [http-nio-8080-exec-7] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@56b79b87
+2026-01-04 14:37:47.133 [http-nio-8080-exec-7] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-01-04 14:37:47.630 [http-nio-8080-exec-7] INFO  c.e.controller.LoginServlet - Successful login for user: bhargav_007_ (ID: 2)
+2026-01-04 14:37:47.633 [http-nio-8080-exec-7] DEBUG c.e.controller.LoginServlet - Invalidating old session for security (session fixation prevention)
+2026-01-04 14:37:47.648 [http-nio-8080-exec-7] DEBUG c.e.controller.LoginServlet - Remember Me enabled for user bhargav_007_
+2026-01-04 14:37:48.053 [http-nio-8080-exec-7] DEBUG c.e.controller.LoginServlet - Remember Me cookie set for user bhargav_007_, expires in 15 days
+2026-01-04 14:37:48.057 [http-nio-8080-exec-7] INFO  c.e.controller.LoginServlet - Login completed successfully for user bhargav_007_, redirecting to dashboard
+2026-01-04 14:37:48.127 [http-nio-8080-exec-8] DEBUG c.e.controller.DashboardServlet - Loading dashboard for user 2
+2026-01-04 14:37:48.456 [http-nio-8080-exec-8] DEBUG c.e.controller.DashboardServlet - Dashboard loaded successfully for user 2
+2026-01-04 14:38:48.654 [http-nio-8080-exec-5] INFO  c.e.controller.BudgetServlet - Initializing BudgetServlet
+2026-01-04 14:38:48.656 [http-nio-8080-exec-5] INFO  c.e.controller.BudgetServlet - BudgetServlet Initialized Successfully
+2026-01-04 14:38:48.667 [http-nio-8080-exec-5] DEBUG c.e.controller.BudgetServlet - GET request from user 2, action: null
+2026-01-04 14:38:48.687 [http-nio-8080-exec-5] DEBUG c.e.controller.BudgetServlet - Loaded 1 budgets and 9 categories for user 2
+2026-01-04 14:38:54.933 [http-nio-8080-exec-1] DEBUG c.e.controller.BudgetServlet - GET request from user 2, action: detail
+2026-01-04 14:38:54.935 [http-nio-8080-exec-1] DEBUG c.e.controller.BudgetServlet - Loading budget detail 1 for user 2
+2026-01-04 14:38:54.952 [http-nio-8080-exec-1] DEBUG c.e.controller.BudgetServlet - Loaded budget 1 with 3 expenses for user 2
+2026-01-04 14:39:18.841 [http-nio-8080-exec-7] DEBUG c.e.controller.BudgetServlet - GET request from user 2, action: null
+2026-01-04 14:39:18.860 [http-nio-8080-exec-7] DEBUG c.e.controller.BudgetServlet - Loaded 1 budgets and 9 categories for user 2
+2026-01-04 14:39:26.257 [http-nio-8080-exec-8] DEBUG c.e.controller.ListExpensesServlet - User 2 requested expense list
+2026-01-04 14:39:26.258 [http-nio-8080-exec-8] DEBUG c.e.controller.ListExpensesServlet - Fetching expenses for user 2: page=1, pageSize=20, filters=[from=null, to=null, cat=null]
+2026-01-04 14:39:35.679 [http-nio-8080-exec-10] DEBUG c.e.controller.ListExpensesServlet - User 2 requested expense list
+2026-01-04 14:39:35.682 [http-nio-8080-exec-10] DEBUG c.e.controller.ListExpensesServlet - Fetching expenses for user 2: page=1, pageSize=10, filters=[from=null, to=null, cat=null]
+2026-01-04 14:39:40.772 [http-nio-8080-exec-2] DEBUG c.e.controller.ListExpensesServlet - User 2 requested expense list
+2026-01-04 14:39:40.774 [http-nio-8080-exec-2] DEBUG c.e.controller.ListExpensesServlet - Fetching expenses for user 2: page=2, pageSize=10, filters=[from=null, to=null, cat=null]
+2026-01-04 14:39:53.116 [http-nio-8080-exec-3] DEBUG c.e.controller.ListExpensesServlet - User 2 requested expense list
+2026-01-04 14:39:53.117 [http-nio-8080-exec-3] DEBUG c.e.controller.ListExpensesServlet - Fetching expenses for user 2: page=1, pageSize=20, filters=[from=null, to=null, cat=null]
+2026-01-04 14:40:01.874 [http-nio-8080-exec-7] DEBUG c.e.controller.BudgetServlet - GET request from user 2, action: null
+2026-01-04 14:40:01.882 [http-nio-8080-exec-7] DEBUG c.e.controller.BudgetServlet - Loaded 1 budgets and 9 categories for user 2
+2026-01-04 14:40:03.327 [http-nio-8080-exec-8] INFO  c.e.controller.ReportServlet - Initializing ReportServlet
+2026-01-04 14:40:03.332 [http-nio-8080-exec-8] DEBUG c.e.controller.ReportServlet - User 2 requested reports page
+2026-01-04 14:40:03.332 [http-nio-8080-exec-8] DEBUG c.e.controller.ReportServlet - Generating predefined report 'THIS_MONTH' for user 2
+2026-01-04 14:40:08.766 [http-nio-8080-exec-10] DEBUG c.e.controller.CategoryServlet - User 2 requested category management
+2026-01-04 14:40:13.057 [http-nio-8080-exec-2] DEBUG c.e.controller.ProfileServlet - Loading profile page for user 2
+2026-01-04 14:41:18.965 [http-nio-8080-exec-7] DEBUG c.e.controller.ListExpensesServlet - User 2 requested expense list
+2026-01-04 14:41:18.967 [http-nio-8080-exec-7] DEBUG c.e.controller.ListExpensesServlet - Fetching expenses for user 2: page=1, pageSize=20, filters=[from=null, to=null, cat=null]
+2026-01-04 14:41:22.806 [http-nio-8080-exec-8] DEBUG c.e.controller.ExportServlet - User 2 requested export
+2026-01-04 14:41:22.807 [http-nio-8080-exec-8] DEBUG c.e.controller.ExportServlet - Generating Cumulative CSV for user 2
+2026-01-04 14:41:22.830 [http-nio-8080-exec-8] INFO  c.e.controller.ExportServlet - CSV export complete for user 2
+2026-01-04 14:41:51.461 [http-nio-8080-exec-9] DEBUG c.e.controller.ExportServlet - User 2 requested export
+2026-01-04 14:41:51.462 [http-nio-8080-exec-9] DEBUG c.e.controller.ExportServlet - Generating PDF for user 2
+2026-01-04 14:41:52.988 [http-nio-8080-exec-9] INFO  c.e.controller.ExportServlet - PDF export complete for user 2
+2026-01-04 14:44:55.902 [http-nio-8080-exec-2] DEBUG c.e.controller.LogoutServlet - Processing logout request
+2026-01-04 14:44:55.903 [http-nio-8080-exec-2] INFO  c.e.controller.LogoutServlet - Logging out user: bhargav_007_
+2026-01-04 14:44:55.968 [http-nio-8080-exec-2] DEBUG c.e.controller.LogoutServlet - Session invalidated
+2026-01-04 14:44:55.975 [http-nio-8080-exec-1] DEBUG c.e.controller.LoginServlet - GET /login - Checking if user already logged in
+2026-01-04 14:44:55.976 [http-nio-8080-exec-1] DEBUG c.e.controller.LoginServlet - Displaying login form
+2026-01-04 14:45:13.171 [http-nio-8080-exec-9] DEBUG c.e.controller.LoginServlet - GET /login - Checking if user already logged in
+2026-01-04 14:45:13.173 [http-nio-8080-exec-9] DEBUG c.e.controller.LoginServlet - Displaying login form
