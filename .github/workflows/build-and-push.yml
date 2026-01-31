@@ -14,6 +14,8 @@ on:
     branches:
       - main              # usually we want to validate PRs going into main
 
+  workflow_dispatch: 
+  
 # List of jobs that run (can have multiple parallel or dependent jobs)
 jobs:
   # Main job name - can be anything descriptive
