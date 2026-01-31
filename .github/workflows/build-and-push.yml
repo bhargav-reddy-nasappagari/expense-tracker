@@ -7,12 +7,15 @@ on:
     branches:
       - main
       - develop           # also run on develop (build & test, but no push to GHCR)
+      - develop           # also run on develop (build & test, but no push to GHCR)
 
   pull_request:
     branches:
       - main              # validate PRs going into main
+      - main              # validate PRs going into main
 
 jobs:
+  build-and-test:
   build-and-test:
     runs-on: ubuntu-latest
 
@@ -65,17 +68,28 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
           cache: maven
+          java-version: '21'
+          distribution: 'temurin'
+          cache: maven
 
       # ────────────────────────────────────────────────────────────────
+      # Run unit / integration tests using environment variables
+      # If tests still fail → add more env vars above or mock more
       # Run unit / integration tests using environment variables
       # If tests still fail → add more env vars above or mock more
       # ────────────────────────────────────────────────────────────────
       - name: Run tests
         run: mvn clean test --batch-mode --file pom.xml
+      - name: Run tests
+        run: mvn clean test --batch-mode --file pom.xml
 
       # ────────────────────────────────────────────────────────────────
       # Package the .war file (skip tests again to be safe)
+      # Package the .war file (skip tests again to be safe)
       # ────────────────────────────────────────────────────────────────
+      - name: Package application
+        run: mvn package -DskipTests --batch-mode --file pom.xml
+
       - name: Package application
         run: mvn package -DskipTests --batch-mode --file pom.xml
 
@@ -94,6 +108,7 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: ghcr.io/${{ github.repository }}/expense-tracker-app
+          images: ghcr.io/${{ github.repository }}/expense-tracker-app
           tags: |
             type=raw,value=latest,enable={{is_default_branch}}
             type=ref,event=branch
@@ -103,11 +118,18 @@ jobs:
       # Build & push only when:
       #   - it's a push event (not PR)
       #   - and the branch is main
+      # Build & push only when:
+      #   - it's a push event (not PR)
+      #   - and the branch is main
       # ────────────────────────────────────────────────────────────────
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         with:
+          context: .
+          file: ./Dockerfile
+          push: true
           context: .
           file: ./Dockerfile
           push: true
@@ -118,12 +140,17 @@ jobs:
 
       # ────────────────────────────────────────────────────────────────
       # Optional success message (visible in job summary & logs)
+      # Optional success message (visible in job summary & logs)
       # ────────────────────────────────────────────────────────────────
+      - name: Show pushed image info
+        if: success() && github.event_name == 'push' && github.ref == 'refs/heads/main'
       - name: Show pushed image info
         if: success() && github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
           echo "═══════════════════════════════════════════════"
           echo " Docker image successfully pushed"
+          echo " → ghcr.io/${{ github.repository }}/expense-tracker-app:latest"
+          echo " → ghcr.io/${{ github.repository }}/expense-tracker-app:sha-${{ github.sha || 'unknown' }}"
           echo " → ghcr.io/${{ github.repository }}/expense-tracker-app:latest"
           echo " → ghcr.io/${{ github.repository }}/expense-tracker-app:sha-${{ github.sha || 'unknown' }}"
           echo "═══════════════════════════════════════════════"
