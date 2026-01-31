@@ -1,0 +1,59 @@
+version: '3.9'
+
+services:
+  db:
+    image: mysql:8.4
+    container_name: expense-tracker-db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - "3307:3306"           # maps to 3307 to avoid conflict with local MySQL
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - expense-net
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build: .
+    container_name: expense-tracker-app
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+    
+      DB_URL: jdbc:mysql://db:3306/${MYSQL_DATABASE}?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      DB_USERNAME: ${MYSQL_USER}
+      DB_PASSWORD: ${MYSQL_PASSWORD}
+      
+      APP_BASE_URL: http://localhost:8080
+      EMAIL_SMTP_HOST: smtp.gmail.com
+      EMAIL_SMTP_PORT: 587
+      EMAIL_SMTP_USERNAME: ${EMAIL_USERNAME}
+      EMAIL_SMTP_PASSWORD: ${EMAIL_APP_PASSWORD}
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - expense-net
+    volumes:
+      # Very useful - keep logs outside container
+      - app_logs:/usr/local/tomcat/logs
+      # Optional: if you want to use real config.properties file
+      # - ./src/main/resources/config.properties:/usr/local/tomcat/config/config.properties:ro
+
+volumes:
+  mysql_data:
+  app_logs:
+
+networks:
+  expense-net:
+    driver: bridge

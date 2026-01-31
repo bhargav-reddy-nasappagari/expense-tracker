@@ -15,7 +15,7 @@ class ConfigLoaderTest {
     @Test
     void testEmailConfigLoaded() {
         String smtpHost = ConfigLoader.get("email.smtp.host");
-        assertEquals("smtp.gmail.com", smtpHost);
+        assertEquals("smtp-pulse.com", smtpHost);
     }
 
     @Test

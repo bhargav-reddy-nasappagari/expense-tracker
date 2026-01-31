@@ -18,18 +18,23 @@ public class FlywayInitializer implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         try {
-            // Load database configuration from classpath
-            Properties props = new Properties();
-            try (InputStream is = getClass().getClassLoader().getResourceAsStream("config.properties")) {
-                if (is == null) {
-                    throw new RuntimeException("config.properties not found in classpath");
-                }
-                props.load(is);
-            }
+            
+            // Read from ENVIRONMENT VARIABLES (set by docker-compose)
+            String url = System.getenv("DB_URL");
+            String username = System.getenv("DB_USERNAME");
+            String password = System.getenv("DB_PASSWORD");
 
-            String url = props.getProperty("db.url");
-            String username = props.getProperty("db.username");
-            String password = props.getProperty("db.password");
+            // Fallback to config.properties if env vars not set (for local dev)
+            if (url == null) {
+                Properties props = new Properties();
+                try (InputStream is = getClass().getClassLoader()
+                        .getResourceAsStream("config.properties")) {
+                    props.load(is);
+                }
+                url = props.getProperty("db.url");
+                username = props.getProperty("db.username");
+                password = props.getProperty("db.password");
+            }
 
             // Configure Flyway
             Flyway flyway = Flyway.configure()

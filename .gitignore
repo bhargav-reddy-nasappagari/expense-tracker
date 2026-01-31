@@ -1,11 +1,31 @@
-# Configuration files with secrets
-src/main/resources/config.properties
-config.properties.local
+# Environment - NEVER commit!
+.env
+*.env
+
+# Config - Never commit!
+config.properties
+config.properties.*
+
+# Build artifacts
+target/
+*.war
+*.jar
+*.class
+
+# Logs
+logs/
+*.log
 
 # IDE
 .idea/
 *.iml
 .vscode/
+.settings/
 
-# Build
-target/
+# Docker volumes
+mysql_data/
+app_logs/
+
+# OS
+.DS_Store
+Thumbs.db

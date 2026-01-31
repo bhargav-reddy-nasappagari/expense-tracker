@@ -22,7 +22,7 @@ CREATE TABLE expenses (
     -- Performance indexes
     INDEX idx_user_date_id     (user_id, expense_date DESC, id),
     INDEX idx_user_category (user_id, category_id),
-    INDEX idx_category      (category_id),
+    INDEX idx_category      (category_id)
 
     -- Note: expense_date validation is handled in application layer
 
