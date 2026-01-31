@@ -3,64 +3,77 @@ name: Build WAR → Docker Image → Push to GHCR
 
 # When should this workflow run?
 on:
-  # Triggers on pushes to these branches
   push:
     branches:
       - main
-      - develop           # also run on develop branch (for testing / preview builds)
+      - develop           # also run on develop (build & test, but no push to GHCR)
 
-  # Triggers on pull requests targeting these branches
   pull_request:
     branches:
-      - main              # usually we want to validate PRs going into main
+      - main              # validate PRs going into main
 
-# List of jobs that run (can have multiple parallel or dependent jobs)
 jobs:
-  # Main job name - can be anything descriptive
-  build-and-push:
-    # Which runner (virtual machine) to use
-    # ubuntu-latest = latest Ubuntu provided by GitHub (recommended for Java/Docker)
+  build-and-test:
     runs-on: ubuntu-latest
 
-    # Steps are executed one after another in this job
-    steps:
+    # Environment variables available to ALL steps in this job
+    # → ConfigLoader will read these first (higher priority than config.properties)
+    env:
       # ────────────────────────────────────────────────────────────────
-      # 1. Get your repository code into the runner
+      # Database connection (use H2 in-memory or fake values for unit tests)
+      # If you use Testcontainers later → these can be overridden dynamically
       # ────────────────────────────────────────────────────────────────
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        # with:
-        #   fetch-depth: 0    # uncomment if you need full history (e.g. for semantic versioning)
+      DB_URL:                    jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;MODE=MySQL
+      DB_USERNAME:               sa
+      DB_PASSWORD:               ""
 
       # ────────────────────────────────────────────────────────────────
-      # 2. Setup Java environment + Maven dependency cache
+      # Email / SMTP (fake / dummy values – never use real credentials here)
       # ────────────────────────────────────────────────────────────────
+      EMAIL_SMTP_HOST:           localhost
+      EMAIL_SMTP_PORT:           1025
+      EMAIL_SMTP_USERNAME:       test@example.com
+      EMAIL_SMTP_PASSWORD:       dummy-app-password
+
+      # ────────────────────────────────────────────────────────────────
+      # Token & security related (adjust according to your real keys)
+      # ────────────────────────────────────────────────────────────────
+      TOKEN_EXPIRY_HOURS:        24
+      RESET_TOKEN_EXPIRY_MINUTES: 60
+
+      # Add here EVERY other key that your ConfigLoader reads
+      # Examples:
+      # APP_SECRET_KEY:            some-test-secret
+      # JWT_SECRET:                test-jwt-secret-for-ci-only
+      # FRONTEND_URL:              http://localhost:3000
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
       - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
-          java-version: '21'           # ← change to '11' or '21' if your project uses different version
-          distribution: 'temurin'      # Eclipse Temurin = good open-source distribution
-          cache: maven                 # caches ~/.m2/repository → much faster builds
+          java-version: '21'
+          distribution: 'temurin'
+          cache: maven
 
       # ────────────────────────────────────────────────────────────────
-      # 3. Build the project (compile + package .war)
+      # Run unit / integration tests using environment variables
+      # If tests still fail → add more env vars above or mock more
       # ────────────────────────────────────────────────────────────────
-      - name: Build with Maven
-        run: mvn clean package --batch-mode --file pom.xml
-        # Tip: add -DskipTests if tests are not ready yet or are failing
-        # env:
-        #   MAVEN_OPTS: "-Xmx1024m"   # optional: limit memory if runner struggles
+      - name: Run tests
+        run: mvn clean test --batch-mode --file pom.xml
 
       # ────────────────────────────────────────────────────────────────
-      # 4. Prepare Docker Buildx (supports better caching & multi-platform)
+      # Package the .war file (skip tests again to be safe)
       # ────────────────────────────────────────────────────────────────
+      - name: Package application
+        run: mvn package -DskipTests --batch-mode --file pom.xml
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      # ────────────────────────────────────────────────────────────────
-      # 5. Login to GitHub Container Registry
-      # Uses built-in GITHUB_TOKEN → no need to create extra secrets
-      # ────────────────────────────────────────────────────────────────
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v3
         with:
@@ -68,48 +81,41 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      # ────────────────────────────────────────────────────────────────
-      # 6. Generate smart tags & labels for the Docker image
-      # Examples: :latest (only on main), :develop, :sha-abc123, :pull/42-head
-      # ────────────────────────────────────────────────────────────────
       - name: Generate Docker metadata (tags & labels)
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ghcr.io/${{ github.repository }}/app
-          # You can change "app" to "expense-tracker", "backend", etc.
+          images: ghcr.io/${{ github.repository }}/expense-tracker-app
           tags: |
-            # :latest only on default branch (usually main)
             type=raw,value=latest,enable={{is_default_branch}}
-            # branch name as tag (develop → :develop)
             type=ref,event=branch
-            # short commit sha (→ :sha-1a2b3c4)
             type=sha,prefix=sha-,format=short
 
       # ────────────────────────────────────────────────────────────────
-      # 7. Build Docker image & push it (only on push to main, not on PR)
+      # Build & push only when:
+      #   - it's a push event (not PR)
+      #   - and the branch is main
       # ────────────────────────────────────────────────────────────────
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         with:
-          context: .                     # build context = repository root
-          file: ./Dockerfile             # change if your Dockerfile has different name/location
-          push: ${{ github.event_name != 'pull_request' && github.ref == 'refs/heads/main' }}
-          # Only push on direct push to main (not PRs, not develop)
+          context: .
+          file: ./Dockerfile
+          push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          # GitHub Actions cache for layers → much faster subsequent builds
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
       # ────────────────────────────────────────────────────────────────
-      # 8. Optional: print info to workflow summary / logs
+      # Optional success message (visible in job summary & logs)
       # ────────────────────────────────────────────────────────────────
-      - name: Show pushed image information
-        if: success() && github.ref == 'refs/heads/main'
+      - name: Show pushed image info
+        if: success() && github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
           echo "═══════════════════════════════════════════════"
           echo " Docker image successfully pushed"
-          echo " → ghcr.io/${{ github.repository }}/app:latest"
-          echo " → ghcr.io/${{ github.repository }}/app:sha-${{ github.sha || 'unknown' }}"
+          echo " → ghcr.io/${{ github.repository }}/expense-tracker-app:latest"
+          echo " → ghcr.io/${{ github.repository }}/expense-tracker-app:sha-${{ github.sha || 'unknown' }}"
           echo "═══════════════════════════════════════════════"
