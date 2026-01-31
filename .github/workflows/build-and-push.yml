@@ -26,6 +26,7 @@ jobs:
       DB_URL:                    jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;MODE=MySQL
       DB_USERNAME:               sa
       DB_PASSWORD:               ""
+      DB_DRIVER:                 org.h2.Driver
 
       # ────────────────────────────────────────────────────────────────
       # Email / SMTP (fake / dummy values – never use real credentials here)
@@ -34,18 +35,25 @@ jobs:
       EMAIL_SMTP_PORT:           1025
       EMAIL_SMTP_USERNAME:       test@example.com
       EMAIL_SMTP_PASSWORD:       dummy-app-password
+      EMAIL_FROM:                noreply@example.com
+      EMAIL_SMTP_AUTH:           false
+      EMAIL_SMTP_STARTTLS:       false
 
       # ────────────────────────────────────────────────────────────────
       # Token & security related (adjust according to your real keys)
       # ────────────────────────────────────────────────────────────────
       TOKEN_EXPIRY_HOURS:        24
       RESET_TOKEN_EXPIRY_MINUTES: 60
+      JWT_SECRET:                test-jwt-secret-for-ci-only-do-not-use-in-production
+      APP_SECRET_KEY:            test-app-secret-for-ci-only
 
-      # Add here EVERY other key that your ConfigLoader reads
-      # Examples:
-      # APP_SECRET_KEY:            some-test-secret
-      # JWT_SECRET:                test-jwt-secret-for-ci-only
-      # FRONTEND_URL:              http://localhost:3000
+      # ────────────────────────────────────────────────────────────────
+      # Application settings
+      # ────────────────────────────────────────────────────────────────
+      FRONTEND_URL:              http://localhost:3000
+      BACKEND_URL:               http://localhost:8080
+      APP_ENV:                   test
+      DEBUG:                     true
 
     steps:
       - name: Checkout repository

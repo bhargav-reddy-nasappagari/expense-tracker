@@ -27,14 +27,16 @@ public final class ConfigLoader {
         try (InputStream is = ConfigLoader.class.getClassLoader()
                 .getResourceAsStream("config.properties")) {
             
-            if (is == null) {
-                throw new RuntimeException("config.properties not found in classpath");
+            if (is != null) {
+                // config.properties exists - load it
+                properties.load(is);
+                System.out.println("✅ Configuration loaded from config.properties");
+            } else {
+                // config.properties not found - rely on environment variables only
+                System.out.println("ℹ️ config.properties not found - using environment variables only");
             }
             
-            properties.load(is);
             loaded = true;
-            
-            System.out.println("✅ Configuration loaded successfully");
             
         } catch (IOException e) {
             throw new RuntimeException("Failed to load configuration", e);
