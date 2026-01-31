@@ -99,16 +99,12 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: ghcr.io/${{ github.repository }}/expense-tracker-app
-          images: ghcr.io/${{ github.repository }}/expense-tracker-app
           tags: |
             type=raw,value=latest,enable={{is_default_branch}}
             type=ref,event=branch
             type=sha,prefix=sha-,format=short
 
       # ────────────────────────────────────────────────────────────────
-      # Build & push only when:
-      #   - it's a push event (not PR)
-      #   - and the branch is main
       # Build & push only when:
       #   - it's a push event (not PR)
       #   - and the branch is main
