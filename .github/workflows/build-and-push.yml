@@ -116,11 +116,7 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         with:
-          context: .
-          file: ./Dockerfile
-          push: true
           context: .
           file: ./Dockerfile
           push: true
@@ -135,13 +131,9 @@ jobs:
       # ────────────────────────────────────────────────────────────────
       - name: Show pushed image info
         if: success() && github.event_name == 'push' && github.ref == 'refs/heads/main'
-      - name: Show pushed image info
-        if: success() && github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
           echo "═══════════════════════════════════════════════"
           echo " Docker image successfully pushed"
-          echo " → ghcr.io/${{ github.repository }}/expense-tracker-app:latest"
-          echo " → ghcr.io/${{ github.repository }}/expense-tracker-app:sha-${{ github.sha || 'unknown' }}"
           echo " → ghcr.io/${{ github.repository }}/expense-tracker-app:latest"
           echo " → ghcr.io/${{ github.repository }}/expense-tracker-app:sha-${{ github.sha || 'unknown' }}"
           echo "═══════════════════════════════════════════════"
