@@ -16,7 +16,6 @@ on:
 
 jobs:
   build-and-test:
-  build-and-test:
     runs-on: ubuntu-latest
 
     # Environment variables available to ALL steps in this job
