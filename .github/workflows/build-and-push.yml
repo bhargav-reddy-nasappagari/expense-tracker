@@ -7,11 +7,9 @@ on:
     branches:
       - main
       - develop           # also run on develop (build & test, but no push to GHCR)
-      - develop           # also run on develop (build & test, but no push to GHCR)
 
   pull_request:
     branches:
-      - main              # validate PRs going into main
       - main              # validate PRs going into main
 
 jobs:
@@ -22,32 +20,37 @@ jobs:
     # → ConfigLoader will read these first (higher priority than config.properties)
     env:
       # ────────────────────────────────────────────────────────────────
-      # Database connection (use H2 in-memory or fake values for unit tests)
-      # If you use Testcontainers later → these can be overridden dynamically
+      # Database connection (MUST contain "expense_tracker_db" for tests)
       # ────────────────────────────────────────────────────────────────
-      DB_URL:                    jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;MODE=MySQL
+      DB_URL:                    jdbc:h2:mem:expense_tracker_db;DB_CLOSE_DELAY=-1;MODE=MySQL
       DB_USERNAME:               sa
       DB_PASSWORD:               ""
       DB_DRIVER:                 org.h2.Driver
 
       # ────────────────────────────────────────────────────────────────
-      # Email / SMTP (fake / dummy values – never use real credentials here)
+      # Email / SMTP (MUST be "smtp-pulse.com" for tests)
       # ────────────────────────────────────────────────────────────────
-      EMAIL_SMTP_HOST:           localhost
-      EMAIL_SMTP_PORT:           1025
+      EMAIL_SMTP_HOST:           smtp-pulse.com
+      EMAIL_SMTP_PORT:           587
       EMAIL_SMTP_USERNAME:       test@example.com
       EMAIL_SMTP_PASSWORD:       dummy-app-password
       EMAIL_FROM:                noreply@example.com
-      EMAIL_SMTP_AUTH:           false
-      EMAIL_SMTP_STARTTLS:       false
+      EMAIL_SMTP_AUTH:           true
+      EMAIL_SMTP_STARTTLS:       true
 
       # ────────────────────────────────────────────────────────────────
-      # Token & security related (adjust according to your real keys)
+      # Token & security related
       # ────────────────────────────────────────────────────────────────
       TOKEN_EXPIRY_HOURS:        24
       RESET_TOKEN_EXPIRY_MINUTES: 60
+      SECURITY_TOKEN_EXPIRY_HOURS: 24
       JWT_SECRET:                test-jwt-secret-for-ci-only-do-not-use-in-production
       APP_SECRET_KEY:            test-app-secret-for-ci-only
+
+      # ────────────────────────────────────────────────────────────────
+      # Feature flags (MUST be "true" for tests)
+      # ────────────────────────────────────────────────────────────────
+      FEATURE_EMAIL_VERIFICATION_ENABLED: true
 
       # ────────────────────────────────────────────────────────────────
       # Application settings
@@ -70,19 +73,15 @@ jobs:
 
       # ────────────────────────────────────────────────────────────────
       # Run unit / integration tests using environment variables
-      # If tests still fail → add more env vars above or mock more
-      # Run unit / integration tests using environment variables
-      # If tests still fail → add more env vars above or mock more
       # ────────────────────────────────────────────────────────────────
       - name: Run tests
         run: mvn clean test --batch-mode --file pom.xml
 
       # ────────────────────────────────────────────────────────────────
       # Package the .war file (skip tests again to be safe)
-      # Package the .war file (skip tests again to be safe)
       # ────────────────────────────────────────────────────────────────
       - name: Package application
-        run: mvn package --batch-mode --file pom.xml
+        run: mvn package -DskipTests --batch-mode --file pom.xml
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -122,7 +121,6 @@ jobs:
           cache-to: type=gha,mode=max
 
       # ────────────────────────────────────────────────────────────────
-      # Optional success message (visible in job summary & logs)
       # Optional success message (visible in job summary & logs)
       # ────────────────────────────────────────────────────────────────
       - name: Show pushed image info
